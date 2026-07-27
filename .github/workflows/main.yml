@@ -33,7 +33,6 @@ jobs:
             --no-host-directories \
             --directory-prefix=_site \
             'https://milena-design-portfolio.phongtaolaobidao094.chatgpt.site/'
-          printf '\n@media (hover: none), (pointer: coarse) { html { scroll-behavior: auto !important; } }\n' >> _site/assets/index-Csf9j4XZ.css
           touch _site/.nojekyll
       - name: Configure Pages
         uses: actions/configure-pages@v5
