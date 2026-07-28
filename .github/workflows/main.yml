@@ -34,6 +34,8 @@ jobs:
             --directory-prefix=_site \
             'https://milena-design-portfolio.phongtaolaobidao094.chatgpt.site/'
           printf '\nhtml { scroll-behavior: auto !important; }\n' >> _site/assets/index-Csf9j4XZ.css
+          printf '%s\n' 'document.addEventListener("click",function(e){const a=e.target.closest("a[href^=\"#\"]");if(!a)return;const h=a.getAttribute("href"),s=h&&h!=="#"&&document.querySelector(h);if(!s)return;e.preventDefault();e.stopPropagation();s.scrollIntoView({behavior:"auto",block:"start"});history.replaceState(null,"",location.pathname+location.search)},true);' > _site/navigation-fix.js
+          sed -i 's#</body>#<script src="/navigation-fix.js"></script></body>#' _site/index.html
           touch _site/.nojekyll
       - name: Configure Pages
         uses: actions/configure-pages@v5
