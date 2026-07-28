@@ -22,7 +22,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Download portfolio
+      - name: Download and prepare portfolio
         run: |
           mkdir -p _site
           wget \
@@ -33,10 +33,18 @@ jobs:
             --no-host-directories \
             --directory-prefix=_site \
             'https://milena-design-portfolio.phongtaolaobidao094.chatgpt.site/'
-          printf '\nhtml { scroll-behavior: auto !important; }\n' >> _site/assets/index-Csf9j4XZ.css
-          printf '%s\n' 'document.addEventListener("click",function(e){const a=e.target.closest("a[href^=\"#\"]");if(!a)return;const h=a.getAttribute("href"),s=h&&h!=="#"&&document.querySelector(h);if(!s)return;e.preventDefault();e.stopPropagation();s.scrollIntoView({behavior:"auto",block:"start"});history.replaceState(null,"",location.pathname+location.search)},true);' > _site/navigation-fix.js
+
+          sed -i 's/href="index.html#/href="#/g' _site/index.html
+
+          printf '%s\n' 'html { scroll-behavior: auto !important; }' > _site/site-fixes.css
+
+          printf '%s\n' 'document.addEventListener("click",function(e){const a=e.target.closest("a[href^=\"#\"]");if(!a)return;const h=a.getAttribute("href"),id=h.slice(1),s=document.getElementById(id);if(!s)return;e.preventDefault();e.stopImmediatePropagation();s.scrollIntoView({behavior:"smooth",block:"start"});history.replaceState(null,"",location.pathname+location.search)},true);' > _site/navigation-fix.js
+
+          sed -i 's#</head>#<link rel="stylesheet" href="/site-fixes.css"></head>#' _site/index.html
           sed -i 's#</body>#<script src="/navigation-fix.js"></script></body>#' _site/index.html
+
           touch _site/.nojekyll
+
       - name: Configure Pages
         uses: actions/configure-pages@v5
 
